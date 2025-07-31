@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    credentialsId: 'GitHubCredentials',
+                    url: 'https://github.com/Gaurav-jagtap017/selenium-python-framework.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'python3 -m pip install --upgrade pip'
+                sh 'pip3 install -r requirements.txt'
+            }
+        }
+
+        stage('Run Login Test') {
+            steps {
+                sh 'pytest tests/test_login.py --maxfail=1 --disable-warnings -q'
+            }
+        }
+    }
+}
